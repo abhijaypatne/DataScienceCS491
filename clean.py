@@ -5,15 +5,12 @@ import collections;
 
 """
 input: prof - course dictionary
-return: sorted dictionart according to prof lastname
+return: sorted dictionary according to prof lastname
 """
 def sortDict(dictProfCourse):
     sortedDictProfCourse = {};
     for key in sorted(dictProfCourse):
         sortedDictProfCourse[key] = dictProfCourse.get(key);
-    #print sortedDictProfCourse;
-    print len(dictProfCourse);
-    print len(sortedDictProfCourse);
     return sortedDictProfCourse;
 
 """
@@ -28,8 +25,6 @@ def getLastName(name):
         lastName = name.split(' ')[-1].strip();
     elif ('.' in name):
         lastName = name.split('.')[-1].strip();
-    #print "name: " + name + ">> lastName: " + lastName;
-    #print ">> lastName: " + lastName;
     lastName = lastName.lower().title();
     return lastName;
 
@@ -49,16 +44,10 @@ def parseCatalog(listOfLines):
         lastName = getLastName(name);
         courses = parts[1].strip();
         if(dictProfCourse.has_key(lastName)):
-            value = dictProfCourse.get(lastName)
-            #print "before: " + value + " <" + name;
+            value = dictProfCourse.get(lastName);
             dictProfCourse[lastName] = value + "|" + courses;
-            #value = dictProfCourse.get(name)
-            #print "after: " + value + " <" + name;
         else:
             dictProfCourse[lastName] = courses;
-    #print "dict leng: ", len(dictProfCourse);
-    #for key, val in dictProfCourse:
-        #print key + ">" + val;
     #pprint(dictProfCourse);    ## for printing dictionaries line by line
     #od = collections.OrderedDict(sorted(dictProfCourse.items()))
     return dictProfCourse;
@@ -69,14 +58,12 @@ input: file name
 return: list of lines read
 """
 def readFile(classFile):
-    #print "Input file", classFile;
     fileHandle = open(classFile, "r");
     listOfLines = [line.rstrip('\n') for line in fileHandle];
-    #print listOfLines[0];
     fileHandle.close();
     return listOfLines;
 
-# starting point
+# starting point of the program
 if __name__ == '__main__':
     print "start of the program";
     classFile = 'A:\\new_Sync\\Box Sync\\academics\\sem3\\491\\assignments\\HW2\\class.txt';
@@ -84,5 +71,7 @@ if __name__ == '__main__':
     listOfLines = readFile(classFile);
     dictProfCourse = parseCatalog(listOfLines);
     sortedDictProfCourse = sortDict(dictProfCourse);
+
+    # this needs to be changed, as we have write in the same format as the input class.txt
     with open(cleanClassFile, "w") as fout:
         pprint(sortedDictProfCourse, fout)
