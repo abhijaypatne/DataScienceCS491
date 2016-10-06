@@ -10,46 +10,38 @@ def getSoup(url):
 
 # write header to the file
 def writeHeader(outputFile, header):
-    with open(outputFile, "a") as file:
+    with open(outputFile, "ab") as file:
         csvwriter = csv.writer(file);
         csvwriter.writerow(header);
+        file.close();
 
 # writes required data to the file
 def writeData(outputFile, soup):
     tables = soup.find_all("table", { "class" : "wikitable sortable" });
     reqTable = tables[1];
 
-    file = open(outputFile, "a");
+    file = open(outputFile, "ab");
     csvwriter = csv.writer(file);
-    count = 0;
 
     for row in reqTable.find_all("tr")[1:51]:
         output = []
         columns = row.find_all("td");
         # find game number
-        number = columns[0].find('a').get_text().strip();
-        output.append(number.encode('ascii', 'ignore'));
-
+        output.append(columns[0].find('a').get_text().strip().encode('ascii', 'ignore'));
         # find game year
-        year = columns[1].findAll("span")[-1].get_text()[-4:];
-        output.append(year.encode('ascii', 'ignore'));
-
+        output.append(columns[1].findAll("span")[-1].get_text()[-4:].encode('ascii', 'ignore'));
         # find winning team
-        winner = columns[2].find('a').get_text().strip();
-        output.append(winner);
-
+        output.append(columns[2].find('a').get_text().strip());
         # find score
-        score = columns[3].findAll("span")[-1].get_text();
-        output.append(score.encode('ascii', 'ignore'));
-
+        output.append(columns[3].findAll("span")[-1].get_text().encode('ascii', 'ignore'));
         # find losing team
         output.append(columns[4].find('a').get_text().strip().encode('ascii', 'ignore'));
-
         # find venue
         output.append(columns[5].findAll("span")[-1].get_text().strip().encode('ascii', 'ignore'));
-
+        # write the output
         csvwriter.writerow(output);
-        count += 1;
+
+    file.close();
 
 
 # # starting point of the program
