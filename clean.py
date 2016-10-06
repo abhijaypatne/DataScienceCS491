@@ -44,6 +44,7 @@ def edits2(word):
 
 """
 input: dictionary of corrected courses and professors, output file
+Purpose: Write to cleaned.txt in sorted order
 """
 def writeToFile(dictProfCourses, outputFile):
     file = open(outputFile, "w");
@@ -117,7 +118,7 @@ return : string of cleaned courses
 def processCourses(courses):
     courseList = courses.split("|");
     correctedCourses = "";
-    for course in courseList:
+    for course in sorted(courseList):
         correctedCourse = "";
         tokenList = re.split('(\W)', course);
         for token in tokenList:
