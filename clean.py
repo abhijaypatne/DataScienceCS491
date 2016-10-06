@@ -68,7 +68,7 @@ input: full name as it appears in dirty dataset
 return: last name
 """
 def getLastName(name):
-    lastName = "default"
+    lastName = name;
     if (',' in name):
         lastName = name.split(',')[0].strip();
     elif (' ' in name):
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     cleanClassFile = 'A:\\new_Sync\\Box Sync\\academics\\sem3\\491\\assignments\\HW2\\cleaned.txt';
     listOfLines = readFile(classFile);
     dictProfCourse = parseCatalog(listOfLines);
-    pprint (dictProfCourse);
+    #pprint (dictProfCourse);
     sortedDictProfCourse = sortDict(dictProfCourse);
     dictProfCourse = correctCourses(dictProfCourse);
     writeToFile(dictProfCourse, cleanClassFile);
