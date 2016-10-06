@@ -89,7 +89,7 @@ v2: only store last name as key and course list as values as we are only
 def parseCatalog(listOfLines):
     dictProfCourse = {};
     for line in listOfLines:
-        parts = line.split('-');
+        parts = line.split(' - ');
         name = parts[0].strip();
         lastName = getLastName(name);
         courses = parts[1].strip();
@@ -129,7 +129,7 @@ def processCourses(courses):
             else:
                 token = token;
             correctedCourse += token;
-        correctedCourses += correctedCourse + "|";
+        correctedCourses += correctedCourse.title() + "|";
     return correctedCourses[:-1];
 
 """
@@ -150,9 +150,8 @@ if __name__ == '__main__':
     cleanClassFile = 'A:\\new_Sync\\Box Sync\\academics\\sem3\\491\\assignments\\HW2\\cleaned.txt';
     listOfLines = readFile(classFile);
     dictProfCourse = parseCatalog(listOfLines);
+    pprint (dictProfCourse);
     sortedDictProfCourse = sortDict(dictProfCourse);
-    sortedDictProfCourse;
-    #print sortedDictProfCourse;
     dictProfCourse = correctCourses(dictProfCourse);
     writeToFile(dictProfCourse, cleanClassFile);
     #pprint(dictProfCourse);
