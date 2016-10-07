@@ -67,8 +67,6 @@ def parseCatalog(listOfLines):
             dictProfCourse[lastName] = value + "|" + courses;
         else:
             dictProfCourse[lastName] = courses;
-    #pprint(dictProfCourse);    ## for printing dictionaries line by line
-    #od = collections.OrderedDict(sorted(dictProfCourse.items()))
     return dictProfCourse;
 
 """
