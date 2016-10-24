@@ -5,7 +5,7 @@ import json
 import sys
 import csv
 
-# See Assignment 1 instructions for how to get these credentials
+# Instructions on getting these keys are given in Assignment writeup
 
 access_token_key = "XXXX"
 access_token_secret = "XXXX"
