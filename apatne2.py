@@ -107,15 +107,13 @@ def findTopNSimilarTweetsHashVect(tweets, query, n):
         topNSimilarTweets.append(tweets[i-1]);
     return topNSimilarTweets;
 
-if __name__ == "__main__":
-    print ("start");
-    #tweetsFile = "smallsearch_output.txt";
-    tweetsFile = "search_output.txt";
-    tweets = readFile(tweetsFile);
-
-    # Query 1
-    n = 10;      # top n queries
-    searchQuery = "hillary clinton win";
+"""
+input:
+    tweets: list of tweets
+    searchQuery: query to be searched for
+    n: top n results
+"""
+def query1(tweets, searchQuery, n):
     topNSimilarTweetsTFIDF = findTopNSimilarTweetsTFIDF(tweets, searchQuery, n);
     topNSimilarTweetsCount = findTopNSimilarTweetsCountVect(tweets, searchQuery, n);
     topNSimilarTweetsHash = findTopNSimilarTweetsHashVect(tweets, searchQuery, n);
@@ -126,9 +124,40 @@ if __name__ == "__main__":
     print ("\n Top ", n, " similar tweets using Hash Vectorizer : ");
     print(topNSimilarTweetsHash);
 
-    # Query 2
-    print("\n Top terms per cluster:");
-    centroidTweets = findCentroidTweetsWords(tweets, 5);
+"""
+input:
+    tweets: list of tweets
+    numberOfClusters: total number of clusters expected
+"""
+def query2(tweets, numberOfClusters):
+    totalTweets = len(tweets);
+    numberOfTweetsPerCluster = (int) (totalTweets / numberOfClusters);
+    centroidTweets = findCentroidTweetsWords(tweets, numberOfClusters);
     for i in range(len(centroidTweets)):
-        print("Cluster %d:" % i, end='')
+        print ("\n ##########################################");
+        print ("Top terms for Cluster %d:" % i, end='')
         print (centroidTweets[i]);
+        newquery =  (str.join(" ", centroidTweets[i]));
+        tweetsInEachCluster = findTopNSimilarTweetsTFIDF(tweets, newquery, numberOfTweetsPerCluster );
+        print ("Total tweets in Cluster %d:" % i, end='')
+        print (len(tweetsInEachCluster));
+        print ("Tweets in Cluster %d:" % i, end='')
+        print (tweetsInEachCluster);
+        print("##########################################\n");
+
+
+if __name__ == "__main__":
+    print ("start");
+    #tweetsFile = "smallsearch_output.txt";
+    tweetsFile = "search_output.txt";
+    tweets = readFile(tweetsFile);
+    print ("\n Total tweets fetched: ", len(tweets), "\n");
+
+    # Query 1
+    n = 10;      # top n queries
+    searchQuery = "hillary clinton win";
+    query1(tweets, searchQuery, n)
+
+    # Query 2
+    n = 5 # number of clusters
+    query2(tweets, n);
