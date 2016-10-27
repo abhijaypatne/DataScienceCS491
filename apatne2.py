@@ -1,8 +1,8 @@
 import json;
 from pprint import pprint;
 from sklearn.feature_extraction.text import TfidfVectorizer as tfidf;
-from sklearn.cluster import KMeans, MiniBatchKMeans
-
+from sklearn.cluster import KMeans;
+from sklearn.metrics.pairwise import linear_kernel as lkernel;
 
 """
 read the input tweets file
@@ -32,18 +32,49 @@ def kMeansClustering(tweets, number):
     km.fit(x);
     print("Top terms per cluster:");
     order_centroids = km.cluster_centers_.argsort()[:, ::-1]
-    terms = vectorizer.get_feature_names()
+    terms = vectorizer.get_feature_names();
+    centroidTweets = [[] for _ in range(number)]
     for i in range(5):
         print("Cluster %d:" % i, end='')
-        for ind in order_centroids[i, :10]:
+        for ind in order_centroids[i, :number]:
+            centroidTweets[i].append(terms[ind]);
             print(' %s' % terms[ind], end='')
         print()
+
+    pprint (centroidTweets);
+
+"""
+Purpose: find top n similar tweets to the query
+input:
+    tweets: list of tweets
+    query: query to be searched
+    n: top n tweets similar to the query
+
+output: list of top n similar tweets
+"""
+def findTopNSimilarTweets(tweets, query, n):
+    queryList = [query];
+    totalList = queryList + tweets;
+    vectorizer = tfidf(max_df=0.75, min_df=0.05, stop_words='english');
+    tfidfMatrix = vectorizer.fit_transform(totalList);
+    cosSimilarities = lkernel(tfidfMatrix[0:1], tfidfMatrix).flatten();
+    topNMatches = cosSimilarities.argsort()[:-(n+2):-1];
+    topNSimilarTweets = [];
+    for i in topNMatches[1:]:
+        topNSimilarTweets.append(tweets[i-1]);
+    return topNSimilarTweets;
 
 
 if __name__ == "__main__":
     print ("start");
-    tweetsFile = "smallsearch_output.txt";
+    #tweetsFile = "smallsearch_output.txt";
+    tweetsFile = "search_output.txt";
     tweets = readFile(tweetsFile);
     print (type(tweets));
+    # Query 1
+    searchQuery = "donald trump";
+    topNSimilarTweets = findTopNSimilarTweets(tweets, searchQuery, 5);
+    #pprint(topNSimilarTweets);
+    # Query 2
     kMeansClustering(tweets, 5);
     #pprint (tweets);
