@@ -28,19 +28,17 @@ create a cluster of similar tweets
 input: list of tweets and number of clusters
 return: nothing, just print the top terms per cluster
 """
-def findCentroidTweets(tweets, number):
+def findCentroidTweetsWords(tweets, number):
     vectorizer = tfidfVect(max_df=0.6, min_df=0.05, stop_words='english');
     x = vectorizer.fit_transform(tweets);
     km = KMeans(n_clusters=5, init='k-means++', max_iter=100);
     km.fit(x);
-    print("Top terms per cluster:");
     order_centroids = km.cluster_centers_.argsort()[:, ::-1]
     terms = vectorizer.get_feature_names();
     centroidTweets = [[] for _ in range(number)]
     for i in range(number):
         for ind in order_centroids[i, :number]:
             centroidTweets[i].append(terms[ind]);
-        print()
     return centroidTweets;
 
 """
@@ -114,19 +112,23 @@ if __name__ == "__main__":
     #tweetsFile = "smallsearch_output.txt";
     tweetsFile = "search_output.txt";
     tweets = readFile(tweetsFile);
-    print (type(tweets));
+
     # Query 1
-    n = 10;
-    searchQuery = "donald trump";
+    n = 10;      # top n queries
+    searchQuery = "hillary clinton win";
     topNSimilarTweetsTFIDF = findTopNSimilarTweetsTFIDF(tweets, searchQuery, n);
     topNSimilarTweetsCount = findTopNSimilarTweetsCountVect(tweets, searchQuery, n);
     topNSimilarTweetsHash = findTopNSimilarTweetsHashVect(tweets, searchQuery, n);
-    print ("Top ", n, " similar tweets using TFIDF Vectorizer : ");
+    print ("\n Top ", n, " similar tweets using TFIDF Vectorizer : ");
     print(topNSimilarTweetsTFIDF);
-    print ("Top ", n, " similar tweets using Count Vectorizer : ");
+    print ("\n Top ", n, " similar tweets using Count Vectorizer : ");
     print(topNSimilarTweetsCount);
-    print ("Top ", n, " similar tweets using Hash Vectorizer : ");
+    print ("\n Top ", n, " similar tweets using Hash Vectorizer : ");
     print(topNSimilarTweetsHash);
+
     # Query 2
-    centroidTweets = findCentroidTweets(tweets, 5);
-    #pprint (tweets);
+    print("\n Top terms per cluster:");
+    centroidTweets = findCentroidTweetsWords(tweets, 5);
+    for i in range(len(centroidTweets)):
+        print("Cluster %d:" % i, end='')
+        print (centroidTweets[i]);
