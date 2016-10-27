@@ -1,5 +1,4 @@
 import json;
-from pprint import pprint;
 from sklearn.feature_extraction.text import TfidfVectorizer as tfidfVect;
 from sklearn.feature_extraction.text import CountVectorizer as cntVect;
 from sklearn.feature_extraction.text import HashingVectorizer as hashVect
