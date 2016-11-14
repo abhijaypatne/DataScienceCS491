@@ -1,17 +1,16 @@
 import argparse
 import oauth2 as oauth
 import urllib.request as urllib
-import json
 import sys
 import csv
 
 # Instructions on getting these keys are given in Assignment writeup
 
-access_token_key = "XXXX"
-access_token_secret = "XXXX"
+access_token_key = "154582041-V9uoBpy2d2hKG0u15WQaGFQoI3VtD06CzysOtgoC"
+access_token_secret = "30kVpmW08J9IhKR1Eups8wfMpADMzrUeW65fR7PpEr04H"
 
-consumer_key = "XXXX"
-consumer_secret = "XXXX"
+consumer_key = "R2ZVijGASmh9m1LpLjCTC7nJG"
+consumer_secret = "gZrbRqEKxDrnBGRvVpll0yhiguxd4Ul8W4Faz06BEhYmpv0F80"
 
 _debug = 0
 
@@ -64,9 +63,13 @@ def fetch_samples():
 
 def fetch_by_terms(term):
     url = "https://api.twitter.com/1.1/search/tweets.json"
-    parameters = [("q", term)]
+    # count specifies maximun number of tweets to be downloaded
+    parameters = [("q", term),("count",20)]
     response = twitterreq(url, "GET", parameters)
-    print (response.readline())
+    print (type(response));
+    for line in response:
+        print(line.strip().decode('utf-8'))
+    #print (response.readline())
 
 def fetch_by_user_names(user_name_file):
     #TODO: Fetch the tweets by the list of usernames and write them to stdout in the CSV format
