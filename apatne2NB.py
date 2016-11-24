@@ -1,3 +1,4 @@
+## Naive Bayes classifier for Tweet classification
 
 # coding: utf-8
 
